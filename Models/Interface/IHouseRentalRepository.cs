@@ -4,10 +4,12 @@ namespace HouseRentalAPI.Models.Interface
 {
     public interface IHouseRentalRepository
     {
-        public List<HouseRentalPost> HouseRentalPosts();
-        HouseRentalPost? SingleHouseRentalPost(int id);
+        List<HouseRentalPost> HouseRentalPosts();
+        HouseRentalPost? GetHouseRentalById(int id);
         void AddHouseRentalPost(HouseRentalPostModel model);
         void EditHouseRentalPost(HouseRentalPostModel model);
         void DeleteHouseRentalPost(int id);
+        List<HouseRentalPost> GetHouseRentalsByCity(string cityName);
+        List<HouseRentalPost> GetHouseRentalsByPrice(int minPrice, int maxPrice);
     }
 }

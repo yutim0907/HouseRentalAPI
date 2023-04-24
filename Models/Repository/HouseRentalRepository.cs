@@ -18,7 +18,15 @@ namespace HouseRentalAPI.Models.Repository
             var result = _houseRentalContext.HouseRentalPosts.ToList();
             return result;
         }
-        public HouseRentalPost? SingleHouseRentalPost(int id)
+        public List<HouseRentalPost> GetHouseRentalsByCity(string cityName)
+        {
+            return _houseRentalContext.HouseRentalPosts.Where(h => h.City == cityName).ToList();
+        }
+        public List<HouseRentalPost> GetHouseRentalsByPrice(int minPrice, int maxPrice)
+        {
+            return _houseRentalContext.HouseRentalPosts.Where(h => h.Price >= minPrice && h.Price <= maxPrice).ToList();
+        }
+        public HouseRentalPost? GetHouseRentalById(int id)
         {
             var result = _houseRentalContext.HouseRentalPosts.Where(x => x.Id == id).FirstOrDefault();
             if(result == null)
@@ -55,7 +63,7 @@ namespace HouseRentalAPI.Models.Repository
         public void EditHouseRentalPost(HouseRentalPostModel model)
         {
             var dateTimeNow = DateTime.Now;
-            var selectHouseRentalPost = SingleHouseRentalPost(model.Id);
+            var selectHouseRentalPost = GetHouseRentalById(model.Id);
             if (selectHouseRentalPost != null)
             {
                 selectHouseRentalPost.Title = model.Title;

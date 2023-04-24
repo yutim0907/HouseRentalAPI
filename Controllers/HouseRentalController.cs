@@ -18,21 +18,84 @@ namespace HouseRentalAPI.Controllers
         }
         // GET: api/<HouseRentalController>
         [HttpGet]
-        public IEnumerable<HouseRentalPost> Get()
+        public IActionResult Get()
         {
-            return _houseRentalRepository.HouseRentalPosts();
+            try
+            {
+                var posts = _houseRentalRepository.HouseRentalPosts();
+
+                if (posts == null || !posts.Any())
+                {
+                    return NotFound();
+                }
+
+                return Ok(posts);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"取得資料時發生錯誤: {ex.Message}");
+            }
         }
 
         // GET api/<HouseRentalController>/5
         [HttpGet("{id}")]
-        public ActionResult<HouseRentalPost> Get(int id)
+        public IActionResult Get(int id)
         {
-            var result = _houseRentalRepository.SingleHouseRentalPost(id);
-            if (result == null)
+            try
             {
-                return NotFound("找不到租屋資料");
+                var result = _houseRentalRepository.GetHouseRentalById(id);
+
+                if (result == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(result);
             }
-            return result;
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"取得資料時發生錯誤: {ex.Message}");
+            }
+        }
+
+        [HttpGet("city/{cityName}")]
+        public IActionResult GetByCity(string cityName)
+        {
+            try
+            {
+                var posts = _houseRentalRepository.GetHouseRentalsByCity(cityName);
+
+                if (posts == null || !posts.Any())
+                {
+                    return NotFound();
+                }
+
+                return Ok(posts);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"取得資料時發生錯誤: {ex.Message}");
+            }
+        }
+
+        [HttpGet("price/{minPrice}/{maxPrice}")]
+        public IActionResult GetByPrice(int minPrice, int maxPrice)
+        {
+            try
+            {
+                var posts = _houseRentalRepository.GetHouseRentalsByPrice(minPrice, maxPrice);
+
+                if (posts == null || !posts.Any())
+                {
+                    return NotFound();
+                }
+
+                return Ok(posts);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"取得資料時發生錯誤: {ex.Message}");
+            }
         }
 
         // POST api/<HouseRentalController>
@@ -46,7 +109,7 @@ namespace HouseRentalAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"新增資料時發生錯誤: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"新增資料時發生錯誤: {ex.Message}");
             }
         }
 
@@ -65,7 +128,7 @@ namespace HouseRentalAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"更新資料時發生錯誤: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"更新資料時發生錯誤: {ex.Message}");
             }
         }
 
@@ -73,7 +136,7 @@ namespace HouseRentalAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var result = _houseRentalRepository.SingleHouseRentalPost(id);
+            var result = _houseRentalRepository.GetHouseRentalById(id);
             if (result == null)
             {
                 return NotFound("找不到租屋資料");
@@ -85,7 +148,7 @@ namespace HouseRentalAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"刪除資料時發生錯誤: {ex.Message}");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"刪除資料時發生錯誤: {ex.Message}");
             }
         }
     }
