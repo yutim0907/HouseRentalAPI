@@ -69,6 +69,7 @@ namespace HouseRentalAPI.Models.Repository
                 selectHouseRentalPost.Title = model.Title;
                 selectHouseRentalPost.Description = model.Description;
                 selectHouseRentalPost.City = model.City;
+                selectHouseRentalPost.District = model.District;
                 selectHouseRentalPost.Address = model.Address;
                 selectHouseRentalPost.Price = model.Price;
                 selectHouseRentalPost.LeaseDuration = model.LeaseDuration;
